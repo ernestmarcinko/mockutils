@@ -1,0 +1,33 @@
+{
+	"name": "ernestmarcinko/mockutils",
+	"description": "PHPUnit test mocking utility tools",
+	"homepage": "https://github.com/ernestmarcinko/mockutils",
+	"license": "MIT",
+	"type": "library",
+	"keywords": [
+		"phpunit",
+		"mock",
+		"test",
+		"testing",
+		"utlis"
+	],
+	"autoload": {
+		"psr-4": {
+			"ErnestMarcinko\\MockUtils\\": "src/"
+		}
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"ErnestMarcinko\\MockUtilsTests\\": "tests/MockUtilsTests/"
+		}
+	},
+	"require-dev": {
+		"phpstan/phpstan": "^1.10",
+		"phpunit/phpunit": "11.*",
+		"php-mock/php-mock": "^2.5",
+		"squizlabs/php_codesniffer": "^3.8"
+	},
+	"require": {
+		"php": "^8.3"
+	}
+}
