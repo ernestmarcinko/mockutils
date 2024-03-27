@@ -6,7 +6,7 @@ on:
 
   # When the repo is PUSHed to [main] branch
   pull_request:
-    branches: [ main ]
+    branches: [ master ]
 
   # And allow a manual 'run' button in the github action tab
   workflow_dispatch:
