@@ -6,6 +6,8 @@ use ErnestMarcinko\MockUtils\MockUtilsTestCase;
 use ErrorException;
 use Exception;
 use InvalidArgumentException;
+use PHPUnit\Framework\AssertionFailedError;
+use PHPUnit\Framework\ExpectationFailedException;
 
 class TestMockUtilsTestCase extends MockUtilsTestCase {
 	public function testSetGlobalMocks(): void {
@@ -64,29 +66,39 @@ class TestMockUtilsTestCase extends MockUtilsTestCase {
 		$this->assertSame(1, \ErnestMarcinko\MockUtils\strval(1)); // Defined in other namespace
 	}
 
-	/**
-	 * @throws ErrorException
-	 */
 	public function testExpectCatchException():void {
-		$this->expectCatchException(Exception::class, function(){
+		$this->expectCatchException(function(){
 			throw new Exception('hey!');
-		});
-		$this->expectCatchException(ErrorException::class, function(){
+		}, Exception::class);
+		$this->expectCatchException(function(){
 			throw new ErrorException('hey you!');
-		});
+		}, ErrorException::class);
+		$this->expectCatchException(function(){
+			throw new ErrorException('hey you!');
+		}, ErrorException::class, 'hey you!');
 
 		// Use itself to test itself for missing exception in function
 		$this->expectCatchException(
-			ErrorException::class,
-			// Will throw ErrorException
-			fn()=>$this->expectCatchException(InvalidArgumentException::class, function(){})
+		// Will throw AssertionFailedError
+			fn()=>$this->expectCatchException(function(){}, AssertionFailedError::class),
+			AssertionFailedError::class
 		);
 
 		// Use itself to test itself for bad class
 		$this->expectCatchException(
-			InvalidArgumentException::class,
-			// Will throw InvalidArgumentException
-			fn()=>$this->expectCatchException('RandomClass', function(){}) // @phpstan-ignore-line
+		// Will throw AssertionFailedError
+			fn()=>$this->expectCatchException(function(){}, 'RandomClass'), // @phpstan-ignore-line
+			AssertionFailedError::class
+		);
+
+		// Use itself to test itself for bad message
+		$this->expectCatchException(
+			// This will trigger ExpectationFailedException that 'strings
+			fn()=>$this->expectCatchException(function(){
+				throw new ErrorException('hey you!');
+			}, ErrorException::class, 'hey me!'),
+			ExpectationFailedException::class,
+			'Failed asserting that two strings are identical.'
 		);
 	}
 }

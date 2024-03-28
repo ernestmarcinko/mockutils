@@ -21,7 +21,7 @@ class GlobalMock {
 	 * Creates a global function mock with a pre-determined response
 	 *
 	 * @param string $function_name
-	 * @param mixed $return
+	 * @param mixed|callable $return
 	 * @param string $namespace
 	 * @throws MockEnabledException
 	 */
