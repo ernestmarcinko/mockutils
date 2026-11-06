@@ -8,3 +8,6 @@ vendor
 composer.lock
 package-lock.json
 *.iml
+
+# graft's local graph cache — regenerable, not committed (run `graft build`).
+/graft/
